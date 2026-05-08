@@ -8,7 +8,6 @@ from sklearn.feature_selection import VarianceThreshold
 
 parser = argparse.ArgumentParser()
 parser.add_argument('--model', default='esm2_t36_3B_UR50D')
-#parser.add_argument('--number', type=int, default=731)
 parser.add_argument('--layer', type=int, default=36)
 parser.add_argument('--embedding', type=int, default=1)
 parser.add_argument('--target',type=str,default=' lectin')
@@ -25,16 +24,8 @@ non_lectin = [ 29,  40, 124, 144, 212, 213, 270, 277, 295, 319, 447, 490, 493, 5
        506, 535, 543, 548, 573, 589, 597, 598, 611, 632, 636, 658, 659, 683,
        692, 695, 697, 702, 705, 706, 712]
 protein_data = protein.drop(non_lectin, axis=0)
-#data = data.reset_index(drop=True)
-# random_rows = protein.sample(n=args.number, random_state=42)
-# sample_protein = pd.DataFrame(random_rows)
 seq = protein_data.iloc[:,0].tolist()
-print(seq)
-# #class
-# protein = pd.read_csv('glycan_protein_716.csv',encoding='gbk')
-# random_rows = protein[protein['Protein name'].str.contains(args.target)]
-# print(random_rows.index)
-# seq = random_rows.iloc[:,1].tolist()
+
 
 chunk_size = 1
 my_data =[]
@@ -94,10 +85,7 @@ data = zsorce_data.drop(non_pro, axis=0)
 data = data.reset_index(drop=True)
 data = data.drop(non_lectin, axis=0)
 data = data.reset_index(drop=True)
-# x =random_rows.index
-# data = data.iloc[random_rows.index]
 rows_with_null = data[data.isnull().any(axis=1)]
-#print(random_rows.index)
 data = data.iloc[:,1:]
 protein_num, saccharide_num = data.shape
 
