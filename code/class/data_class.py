@@ -13,7 +13,7 @@ for i in range(0,df.shape[0]):
     data = df.iloc[i, :].dropna()
     x = np.linspace(min(data), max(data), 300)
     y = np.histogram(data, bins=300, density=False)[0]
-    #设置初始参数
+ 
     initial_guess = [50000, 60, 100]
     params, _ = curve_fit(normal_distribution, x, y,bounds=(0,float('inf')),maxfev=float('inf'),p0= initial_guess )
     c, mu, sigma = params
@@ -21,11 +21,11 @@ for i in range(0,df.shape[0]):
     plt.figure(figsize=(8, 6))
     plt.rcParams["font.family"] = "serif"
 
-    # 绘制直方图
+    
     plt.hist(data, bins=x, alpha=0.5, label="Data Distribution",color='#0C4E9B', density=False)
 
-    # 绘制拟合曲线
-    x_fit = np.linspace(min(data), max(data), 1000)  # 平滑曲线的 x 值
+   
+    x_fit = np.linspace(min(data), max(data), 1000)  
     y_fit = normal_distribution(x_fit, c, mu, sigma)
     plt.plot(x_fit, y_fit, color='#F98F34',label="Normal Distribution")
 
