@@ -113,7 +113,6 @@ with open(r"./data/new_glycan_0916.csv", "r") as sugarfile:
                 node2 = "(" + anomernode + "," + sugartem[1][1:] + ")"
                 NodeGrp.append(node1)
                 NodeGrp.append(node2)
-            #print(NodeGrp)
             print("\n")
 
 
