@@ -49,7 +49,6 @@ with open(r"./data/new_glycan_0916.csv", "r") as sugarfile:
             if s == "-":
                 sugarlab = label[:-1][::-1]
                 sugarlab = "".join(sugarlab)
-                # (Neu5Aca2-3Galb1-3)((Neu5Aca2-3Galb1-4(Fuca1-3))GlcNAcb1-6)GalNAca1-4Glc
                 if "(" not in sugarlab:
                     sugarlabreplace = sugarlab.replace(")", "").replace("(", "")
                     monosaccharide = ''
