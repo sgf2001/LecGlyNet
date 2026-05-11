@@ -1,8 +1,3 @@
-# -*- coding: utf-8 -*-
-# @Time    : 2023/6/14 20:55
-# @Author  : lijianxin
-# @File    : sugar_6.py
-# @Software: PyCharm
 import sys
 
 
@@ -35,18 +30,14 @@ def builtGlycan6Node(label1, sugarlabvalue):
     elif label1[-2] == "c":
         Glycan6Node.anomer["c"] = "c"
     else:
-        print("anomer，不合法，请检查语法")
         sys.exit()
-    # 需要对根节点处理
     try:
         if label1[-1] == "2":
             Glycan6Node.parent.append("2")
         elif label1[-1] == "0":
             Glycan6Node.parent = "root"
     except IndexError:
-        print("父节点出现错误")
         sys.exit()
-    # 需要判断对那个孩子标记，这种好像适合类似4Glca1的节点
     Modification_groups = label1[1:len(label1[1:-2]) - len(sugarlabvalue) + 1]
     search_index = []
     if 'S' or 's' in Modification_groups:
@@ -58,7 +49,6 @@ def builtGlycan6Node(label1, sugarlabvalue):
                     if SO3_index == chidrenkey:
                         chidrenvalue.append("SO3")
                 search_index = []
-        # 判断是否含P
     if 'P' or 'p' in Modification_groups:
         for index, letter in enumerate(Modification_groups):
             if letter == 'P':
@@ -69,14 +59,12 @@ def builtGlycan6Node(label1, sugarlabvalue):
                             chidrenvalue.append("P")
                     search_index = []
     if label1[0]!='0'and label1[0] not in Glycan6Node.childrenlistdic.keys():
-        print(label1[0] + ':有问题')
+        print(label1[0] + ':error')
         sys.exit()
     for childkey, childvalue in Glycan6Node.childrenlistdic.items():
         if label1[0] == childkey and len(childvalue) == 0:
             childvalue.append(childkey)
             Glycan6Node.childflagnum += 1
-    # if Glycan6Node.childflagnum == 0:
-    #     print("此节点是叶子节点，没有链接孩子")
 
     return Glycan6Node
 
