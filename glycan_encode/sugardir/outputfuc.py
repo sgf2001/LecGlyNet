@@ -1,9 +1,3 @@
-# -*- coding: utf-8 -*-
-# @Time    : 2023/6/15 14:57
-# @Author  : lijianxin
-# @File    : outputfuc.py
-# @Software: PyCharm
-
 outputfile = open("./output/output_ori.txt","w")
 
 def countsugar(sugarlist):
