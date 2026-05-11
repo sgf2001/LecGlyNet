@@ -7,6 +7,7 @@ The framework is designed to generalize across diverse lectin families and previ
 This repository contains the core implementation of LecGlyNet, including glycan encoding methods, model architectures, and training scripts. Additional datasets, helper modules, molecular dynamics simulation files, and preprocessing resources required for full reproducibility may not yet be included in the current public release. Comprehensive documentation, dependency specifications, licensing information, and missing runtime resources will be added in future updates to improve reproducibility and usability.
 
 Code availability
+glycan_encode:寡糖编码
 code/data_class.py:动态阈值划分脚本
 code/feature_merge.py:特征提取代码
 code/glycan_feature.py:糖特征提取代码
