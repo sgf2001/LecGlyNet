@@ -17,7 +17,7 @@ How to run LecGlyNet
 python predict.py --model_path LecglyNet.pt --csv_path feature.csv --output_path LecglyNet_result.csv
 
 Installation
-git clone https://github.com/sgf2001/LecGlyNet/LecGlyNet.git
+git clone https://github.com/sgf2001/LecGlyNet.git
 cd LecGlyNet
 
 Install dependencies
