@@ -10,29 +10,21 @@ import torch.optim as optim
 from sklearn.metrics import roc_auc_score
 from torch.utils.data import Dataset, DataLoader
 
-# 导入模型
 from model import GlycoproteinProphet
 
-# =========================
-# 参数
-# =========================
 parser = argparse.ArgumentParser()
 
 parser.add_argument("--csv", type=str, default="MAD_dataset_12.csv")
 parser.add_argument("--epochs", type=int, default=200)
 parser.add_argument("--batch_size", type=int, default=128)
 parser.add_argument("--lr", type=float, default=1e-3)
-parser.add_argument("--save_dir", type=str, default="./weights")
+parser.add_argument("--save_path", type=str, default="best_model.pth")
 
 args = parser.parse_args()
 
 os.makedirs(args.save_dir, exist_ok=True)
 
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-
-# =========================
-# 数据
-# =========================
 my_data = pd.read_csv(args.csv)
 
 np.random.seed(42)
@@ -55,9 +47,6 @@ y_train = train_df.iloc[:, 1]
 X_test = test_df.iloc[:, 2:]
 y_test = test_df.iloc[:, 1]
 
-# =========================
-# Dataset
-# =========================
 class MyDataset(Dataset):
 
     def __init__(self, X, y):
@@ -96,9 +85,6 @@ test_loader = DataLoader(
     num_workers=2
 )
 
-# =========================
-# 模型
-# =========================
 model = GlycoproteinProphet().to(device)
 
 criterion = nn.BCELoss()
@@ -114,16 +100,10 @@ scheduler = optim.lr_scheduler.StepLR(
     gamma=0.5
 )
 
-# =========================
-# train
-# =========================
 best_auc = 0
 
 for epoch in range(args.epochs):
 
-    # =====================
-    # train
-    # =====================
     model.train()
 
     train_losses = []
@@ -146,10 +126,6 @@ for epoch in range(args.epochs):
         train_losses.append(loss.item())
 
     scheduler.step()
-
-    # =====================
-    # validation
-    # =====================
     model.eval()
 
     val_probs = []
@@ -171,33 +147,10 @@ for epoch in range(args.epochs):
         val_labels,
         val_probs
     )
-
-    # =====================
-    # save best
-    # =====================
     if auc > best_auc:
 
         best_auc = auc
 
-        save_path = os.path.join(
-            args.save_dir,
-            "best_auc_model.pth"
-        )
+        torch.save(model.state_dict(), args.save_path)
 
-        torch.save(
-            model.state_dict(),
-            save_path
-        )
-
-        print(
-            f"==> Save Best Model | "
-            f"AUC={auc:.4f}"
-        )
-
-    print(
-        f"Epoch [{epoch+1}/{args.epochs}] "
-        f"Loss={np.mean(train_losses):.4f} "
-        f"AUC={auc:.4f}"
-    )
-
-print(f"\nBest AUC: {best_auc:.4f}")
+    
