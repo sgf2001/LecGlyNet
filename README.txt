@@ -1,21 +1,131 @@
-LecGlyNet is a deep learning framework for predicting oligosaccharide–lectin interactions by integrating transformer-based lectin sequence representations with glycan structural fingerprints. The framework combines ESM-2 protein embeddings with hierarchical glycan subtree descriptors to capture both lectin sequence information and the tree-like structural complexity of glycans derived from CFG glycan microarray datasets. These multimodal features are fused through a neural network to classify lectin–glycan binding and non-binding states. In addition, LecGlyNet employs a dynamic thresholding strategy to improve binding-state definition across different lectin–glycan combinations.
+# LecGlyNet
 
-Lectins are critical mediators of biological recognition processes, including immune regulation, cell communication, and pathogen adhesion. However, the structural diversity and branching complexity of glycans make computational modeling of lectin–glycan interactions particularly challenging. LecGlyNet addresses this challenge by explicitly encoding glycan tree structures using subtree fingerprint descriptors while leveraging large-scale protein language model embeddings for lectins. This design improves both predictive performance and biological interpretability.
+**LecGlyNet** is a deep learning framework for predicting oligosaccharide–lectin interactions by integrating transformer-based lectin sequence representations with glycan structural fingerprints. The model combines ESM-2 protein embeddings with hierarchical glycan subtree descriptors to capture both sequence-level and structure-level biological information.
 
-The framework is designed to generalize across diverse lectin families and previously unseen lectin–glycan pairs. Interpretability analyses further identify glycan substructures and lectin residues that contribute to binding specificity. Benchmarking experiments demonstrate that LecGlyNet achieves competitive performance compared with classical machine learning approaches and existing deep learning models such as LectinOracle.
+---
 
-This repository contains the core implementation of LecGlyNet, including glycan encoding methods, model architectures, and training scripts. Additional datasets, helper modules, molecular dynamics simulation files, and preprocessing resources required for full reproducibility may not yet be included in the current public release. Comprehensive documentation, dependency specifications, licensing information, and missing runtime resources will be added in future updates to improve reproducibility and usability.
+## Overview
 
-Code availability
-glycan_encode:寡糖编码
-code/data_class.py:动态阈值划分脚本
-code/feature_merge.py:特征提取代码
-code/glycan_feature.py:糖特征提取代码
-code/LecglyNet.ipynb:模型搭建脚本
-4../LecGlyNet_model/gly_tree.txt:使用gly_tree脚本统计出的每条寡糖序列的单糖、二糖、三糖的种类
-5../LecGlyNet_model/glycan_feature.py:使用指纹结构编码寡糖序列脚本
-6../LecGlyNet_model/glycan_finger_feature.csv:使用指纹结构编码寡糖序列的结果
-7../LecGlyNet_model/dataset.py:将esm-2凝集素特征和指纹结构编码的寡糖特征融合在一起的脚本
+Lectins are key mediators in biological recognition processes, including immune regulation, cell–cell communication, and pathogen adhesion. However, the structural diversity and branching complexity of glycans make computational modeling of lectin–glycan interactions challenging.
 
-How to run LecGlyNet
-python predict.py 
+LecGlyNet addresses this problem by:
+
+- Encoding lectin sequences using **ESM-2 protein language model embeddings**
+- Representing glycans using **hierarchical subtree fingerprint descriptors**
+- Fusing multimodal features through a deep neural network
+- Predicting lectin–glycan binding vs non-binding states
+- Applying a **dynamic thresholding strategy** for robust binding state definition
+
+This design improves both predictive performance and biological interpretability.
+
+---
+
+## Key Features
+
+- Transformer-based protein representation (ESM-2)
+- Structural glycan encoding via subtree descriptors
+- Multimodal feature fusion network
+- Dynamic threshold-based classification
+- Generalization to unseen lectin–glycan pairs
+- Interpretability of glycan substructures and protein residues
+
+---
+
+## Repository Structure
+
+
+LecGlyNet/
+│
+├── glycan_encode/ # Glycan encoding scripts (subtree fingerprinting)
+├── code/
+│ ├── data_class.py # Dynamic thresholding strategy
+│ ├── feature.py # Data preprocessing pipeline
+│ ├── glycan_feature.py # Glycan feature extraction
+│ ├── training.py # Model training script
+│
+├── predict.py # Inference script
+├── README.md # Documentation
+
+
+---
+
+## Code Availability
+
+- **glycan_encode**: Oligosaccharide encoding module  
+- **code/data_class.py**: Dynamic thresholding implementation  
+- **code/feature.py**: Data preprocessing pipeline  
+- **code/glycan_feature.py**: Glycan feature extraction  
+- **code/training.py**: Model training pipeline  
+- **predict.py**: Inference script  
+
+---
+
+## Installation
+
+```bash
+git clone https://github.com/your_username/LecGlyNet.git
+cd LecGlyNet
+
+pip install -r requirements.txt
+
+Dependencies typically include:
+
+PyTorch
+NumPy
+Pandas
+scikit-learn
+fair-esm (ESM-2)
+How to Run LecGlyNet
+1. Feature Preparation
+python code/feature.py
+2. Glycan Encoding
+python glycan_encode/encode.py
+3. Training
+python code/training.py
+4. Prediction
+python predict.py
+Model Description
+
+LecGlyNet integrates:
+
+ESM-2 embeddings for lectin sequences
+Glycan subtree structural fingerprints
+Neural fusion layers for multimodal integration
+
+A dynamic thresholding strategy is used to define binding states across heterogeneous lectin–glycan interactions.
+
+Biological Applications
+Glycan-binding protein prediction
+Lectin specificity profiling
+Host–pathogen interaction analysis
+Glyco-immune interaction studies
+Reproducibility Note
+
+This repository contains the core implementation of LecGlyNet, including encoding methods, model architecture, and training scripts.
+
+Additional resources such as datasets, molecular simulation files, and auxiliary preprocessing modules may not yet be fully included in this release and will be added in future updates to improve reproducibility.
+
+Citation
+
+If you use this code, please cite:
+
+LecGlyNet: A deep learning framework for predicting lectin–glycan interactions using protein language models and glycan subtree fingerprints
+License
+
+To be added.
+
+Contact
+
+For questions or collaboration, please contact the corresponding author.
+
+
+---
+
+如果你下一步需要，我可以帮你再升级两件很关键的 GitHub 内容：
+
+- 🔥 `requirements.txt`（完全补齐环境）
+- 🔥 `Figure 1 model architecture`（论文级架构图说明）
+- 🔥 `workflow diagram (glycan → esm → fusion → threshold)`
+- 🔥 或:contentReference[oaicite:0]{index=0}
+
+直接说就行。
