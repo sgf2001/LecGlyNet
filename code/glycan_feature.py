@@ -1,10 +1,8 @@
+import argparse
 import pandas as pd
 
 
-
 def get_type(sents: str):
-
-   
 
     sac_list = []
 
@@ -12,97 +10,104 @@ def get_type(sents: str):
 
     for i in sub_sents:
 
-        sac_list.append(i.split(":")[0])
+        if ":" in i:
+            sac_list.append(i.split(":")[0])
 
     return sac_list
 
 
+def main():
 
-f = open("test.txt").readlines()
+    parser = argparse.ArgumentParser()
+
+    parser.add_argument("--input", required=True, help="input txt file")
+    parser.add_argument("--output", default="glycan.xlsx")
+
+    args = parser.parse_args()
+
+    with open(args.input, "r") as f:
+        lines = f.readlines()
+
+    # =========================
+    # collect types
+    # =========================
+    single, double, trip = [], [], []
+
+    for line in lines:
+
+        parts = line.strip().split(";")
+
+        if len(parts) < 2:
+            continue
+
+        if parts[0] == "single":
+            single += get_type(parts[-1])
+
+        elif parts[0] == "double":
+            double += get_type(parts[-1])
+
+        elif parts[0] == "trip":
+            trip += get_type(parts[-1])
+
+    single = sorted(list(set(single)))
+    double = sorted(list(set(double)))
+    trip = sorted(list(set(trip)))
+
+    all_type = single + double + trip
+
+    # =========================
+    # build dict
+    # =========================
+    num_rows = len(lines) // 3 + 1
+
+    sac_dict = {
+        "id": [],
+        "name": []
+    }
+
+    for t in all_type:
+        sac_dict[t] = [0 for _ in range(num_rows)]
+
+    row = -1
+    j = 0
+
+    for line in lines:
+
+        parts = line.strip().split(";")
+
+        if j % 3 == 0:
+            row += 1
+
+            sac_dict["id"].append(row + 1)
+
+            sac_dict["name"].append(parts[1] if len(parts) > 1 else "")
+
+        if len(parts) == 3 and parts[-1] != "":
+
+            items = parts[-1].split(",")
+
+            for n in items:
+
+                if ":" in n:
+
+                    key, val = n.split(":")
+
+                    sac_dict[key][row] = int(val)
+
+        j += 1
+
+    df = pd.DataFrame(sac_dict)
+
+    df.to_excel(
+        args.output,
+        sheet_name="count",
+        index=False,
+        na_rep="NULL"
+    )
+
+    print(f"Done! Saved to {args.output}")
+    print(f"Shape: {df.shape}")
 
 
-single = []
-
-double = []
-
-trip = []
-
-for i in f:
-
-    i = i.strip().split(";")
-
-    if i[0] == "single":
-
-        single += get_type(i[-1])
-
-    elif i[0] == "double":
-
-        double += get_type(i[-1])
-
-    elif i[0] == "trip":
-
-        trip += get_type(i[-1])
-
-single = list(set(single))
-
-double = list(set(double))
-
-trip = list(set(trip))
-
-single.sort()
-
-double.sort()
-
-trip.sort()
-
-all_type = single+double+trip
-
-
-
-# 统计个数
-
-sac_dict = {}
-
-sac_dict.setdefault("id",[])
-
-sac_dict.setdefault("name",[])
-
-for i in all_type:
-
-    sac_dict.setdefault(i,[0 for j in range(int(len(f)/3))])
-
-row = 0
-
-j = 3
-
-for i in f:
-
-    i = i.strip().split(";")
-
-    if j >= 3:
-
-        row += 1
-
-        sac_dict['id'].append(row)
-
-        sac_dict['name'].append(i[1])
-
-        j = 0
-
-    if len(i) == 3 and i[-1] != '':
-
-        for n in i[-1].split(","):
-
-            sac_dict[n.split(":")[0]][row-1] = int(n.split(":")[-1])glycan
-
-    j += 1
-
-df = pd.DataFrame(sac_dict)
-
-
-
-df.to_excel('glycan.xlsx',
-
-            sheet_name='count',
-
-            na_rep='NULL')
+if __name__ == "__main__":
+    main()
