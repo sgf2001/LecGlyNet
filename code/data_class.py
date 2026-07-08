@@ -10,9 +10,8 @@ def normal_distribution(x, c, mu, sigma):
     )
 
 
-def fit_sigma(data):
-
-    y_hist, bin_edges = np.histogram(data, bins=100, density=False)
+def fit_sigma(data, bins, maxfev):
+    y_hist, bin_edges = np.histogram(data, bins=bins, density=False)
     x_hist = (bin_edges[:-1] + bin_edges[1:]) / 2
 
     p0 = [max(y_hist), np.mean(data), np.std(data)]
@@ -23,22 +22,39 @@ def fit_sigma(data):
         y_hist,
         p0=p0,
         bounds=(0, np.inf),
-        maxfev=100000
+        maxfev=maxfev
     )
 
-    c, mu, sigma = params
-
+    _, _, sigma = params
     return sigma
 
 
 def main():
-
     parser = argparse.ArgumentParser()
 
     parser.add_argument("--input", required=True)
     parser.add_argument("--output", default="binary_matrix.csv")
-    parser.add_argument("--k", type=float, default=12,
-                        help="classification coefficient")
+
+    parser.add_argument(
+        "--k",
+        type=float,
+        default=12,
+        help="classification coefficient"
+    )
+
+    parser.add_argument(
+        "--bins",
+        type=int,
+        required=True,
+        help="number of histogram bins"
+    )
+
+    parser.add_argument(
+        "--maxfev",
+        type=int,
+        required=True,
+        help="maximum number of function evaluations for curve_fit"
+    )
 
     args = parser.parse_args()
 
@@ -47,15 +63,19 @@ def main():
     result_matrix = []
 
     for i in range(df.shape[0]):
-
         row = df.iloc[i, :].values
 
         valid_mask = ~pd.isna(row)
         valid_data = row[valid_mask]
 
-        sigma = fit_sigma(valid_data)
+        sigma = fit_sigma(
+            data=valid_data,
+            bins=args.bins,
+            maxfev=args.maxfev
+        )
 
-        threshold = args.k * sigma  
+        threshold = args.k * sigma
+
         row_binary = np.zeros(len(row))
 
         row_binary[valid_mask] = (
