@@ -5,14 +5,6 @@ LecGlyNet is a deep learning framework for predicting oligosaccharide–lectin i
 The framework is designed to generalize across diverse lectin families and previously unseen lectin–glycan pairs while improving biological interpretability through glycan subtree analysis and dynamic thresholding strategies.
 
 
-Code availability
-glycan_encode:Glycan subtree encoding methods.
-code/data_class.py:Dynamic thresholding strategy for binding-state classification.
-code/feature.py:Dataset preprocessing and multimodal feature construction.
-code/glycan_feature.py:Glycan structural feature extraction pipeline.
-code/training.py:LecGlyNet model training framework.
-code/predict.py:Model inference and lectin–glycan interaction prediction.
-
 How to run LecGlyNet
 python predict.py --model_path LecglyNet.pt --csv_path feature.csv --output_path LecglyNet_result.csv
 
